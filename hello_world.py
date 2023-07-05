@@ -1,9 +1,8 @@
 from jsonformer import Jsonformer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-print("hello world")
-model = AutoModelForCausalLM.from_pretrained("databricks/dolly-v2-12b")
-tokenizer = AutoTokenizer.from_pretrained("databricks/dolly-v2-12b")
+model = AutoModelForCausalLM.from_pretrained("databricks/dolly-v2-3b")
+tokenizer = AutoTokenizer.from_pretrained("databricks/dolly-v2-3b")
 
 json_schema = {
     "type": "object",
@@ -18,7 +17,7 @@ json_schema = {
     }
 }
 
-prompt = "Generate a person's information based on the following schema:"
+prompt = "Generate a person's information based on the following schema. The person is John Doe, aged 23. John is a student at Georgia Tech, and take the following courses: Chemistry, Mathematics, and a minor in Japanese."
 jsonformer = Jsonformer(model, tokenizer, json_schema, prompt)
 generated_data = jsonformer()
 
