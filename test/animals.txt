@@ -1,0 +1,7 @@
+dog
+cat
+zebra
+giraffe
+rhino
+hippo
+elephant

@@ -1,0 +1,7 @@
+squash
+potato
+corn
+spinach
+onion
+kale
+olive
