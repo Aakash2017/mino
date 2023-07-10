@@ -1,7 +1,8 @@
-# mino
-activate the venv "source mino-env/bin/activate" 
-
-
 # What is Mino
 
-A personalized semantic search for local files. Uses in-memory vector store to quickly find documents.
+A personalized semantic search for local files. Currently stores documents in memory.
+
+## To Run:
+
+1) Upload file path of documents into the entry.py file
+2) Execute entry.py and input associated query
