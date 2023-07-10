@@ -1,7 +1,6 @@
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from loader import load
+from analyzer import analyze
 
 def chunk_text(text, chunk_size):
     chunks = []
@@ -29,10 +28,5 @@ query = input("Enter your query: ")
 document_embeddings = load(documents, model)
 query_embedding = model.encode(query)
 
-# # Calculate cosine similarity and find the most similar document
-similarity_scores = [cosine_similarity(query_embedding, doc_embedding)[0][0] for doc_embedding in document_embeddings]
-most_similar_doc_index = np.argmax(similarity_scores)
-most_similar_doc = documents[most_similar_doc_index]
-
-print("Most similar document:")
-print(most_similar_doc)
+res = analyze(document_embeddings, query_embedding, 1)
+print(res)
