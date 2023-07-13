@@ -1,6 +1,7 @@
 from typing import List, Dict
 import os
 import pandas as pd
+import PyPDF2
 
 def load(files: List, model) -> Dict:
     '''load chunks documents to user-configured chunks and
@@ -8,9 +9,20 @@ def load(files: List, model) -> Dict:
     embeddings per document.'''
     embedded_docs = {}
     for file_path in files:
-        with open(file_path, 'r') as file:
-            for i, chunk in enumerate(read_chunks(file)):
-                embedded_docs[(file_path, str(i))] = model.encode(chunk)
+        ext = os.path.splitext(file_path)[-1].lower()
+        match ext:
+            case ".txt":
+                with open(file_path, 'r', encoding="utf8", errors='ignore') as file:
+                    for i, chunk in enumerate(read_chunks(file)):
+                        embedded_docs[(file_path, str(i))] = model.encode(chunk)
+            case ".pdf":
+                # Currently we only chunk PDF's by page.
+                file = open(file_path, 'rb')
+                reader = PyPDF2.PdfReader(file)
+                for i in range(len(reader.pages)):
+                    embedded_docs[(file_path, str(i))] = model.encode(reader.pages[i].extract_text())
+
+
     df = pd.DataFrame(embedded_docs.items(), columns=['documentID', 'embedding'])                 
     # print(df.head())
     return df

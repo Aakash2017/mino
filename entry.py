@@ -18,7 +18,8 @@ def embed_text(text):
 # User-provided documents
 documents = [
     "test/animals.txt",
-    "test/vegetables.txt"
+    "test/vegetables.txt",
+    "test/test_pdf.pdf",
 ]
 
 model = SentenceTransformer('distilbert-base-nli-mean-tokens')
