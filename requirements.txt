@@ -3,3 +3,4 @@ matplotlib
 plotly
 openai
 PyPDF2
+glob

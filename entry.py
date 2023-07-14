@@ -1,33 +1,30 @@
 from sentence_transformers import SentenceTransformer
 from loader import load
 from analyzer import analyze
+from glob import glob
+from os.path import isdir, isfile, exists
 
-def chunk_text(text, chunk_size):
-    chunks = []
-    words = text.split()
-    for i in range(0, len(words), chunk_size):
-        chunk = ' '.join(words[i:i+chunk_size])
-        chunks.append(chunk)
-    return chunks
+MODEL = SentenceTransformer('distilbert-base-nli-mean-tokens')
 
-def embed_text(text):
-    model = SentenceTransformer('distilbert-base-nli-mean-tokens')
-    embeddings = model.encode(text)
-    return embeddings
+def entry():
+    document_directory = input("enter directory path of text corpus: \n")
+    print(isdir(document_directory), isfile(document_directory), exists(document_directory))
+    if not isdir(document_directory):
+        print("text corpus must be directory: ", document_directory)
+        return
+    if not document_directory.endswith('/'):
+        print("text corpus directory must end with \"/\" :", document_directory)
+        return
+    documents = glob(document_directory+"/**/*.txt", recursive=True) + glob(document_directory+"/**/*.pdf", recursive=True)
+    document_embeddings = load(documents, MODEL)
 
-# User-provided documents
-documents = [
-    "test/animals.txt",
-    "test/vegetables.txt",
-    "test/test_pdf.pdf",
-]
+    query = input("Enter your query: ")
 
-model = SentenceTransformer('distilbert-base-nli-mean-tokens')
-# User query
-query = input("Enter your query: ")
+    query_embedding = MODEL.encode(query)
 
-document_embeddings = load(documents, model)
-query_embedding = model.encode(query)
+    res = analyze(document_embeddings, query_embedding, 1)
+    print(res)
 
-res = analyze(document_embeddings, query_embedding, 1)
-print(res)
+if __name__ == '__main__':
+    entry()
+    

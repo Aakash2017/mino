@@ -2,11 +2,13 @@ from typing import List, Dict
 import os
 import pandas as pd
 import PyPDF2
+import time
 
 def load(files: List, model) -> Dict:
     '''load chunks documents to user-configured chunks and
     calculates the embeddings for each chunk. Returns a list of
     embeddings per document.'''
+    start_time = time.time()
     embedded_docs = {}
     for file_path in files:
         ext = os.path.splitext(file_path)[-1].lower()
@@ -23,8 +25,8 @@ def load(files: List, model) -> Dict:
                     embedded_docs[(file_path, str(i))] = model.encode(reader.pages[i].extract_text())
 
 
-    df = pd.DataFrame(embedded_docs.items(), columns=['documentID', 'embedding'])                 
-    # print(df.head())
+    df = pd.DataFrame(embedded_docs.items(), columns=['documentID', 'embedding'])
+    print("finished indexing corpus in " + str(time.time()-start_time) + " seconds")               
     return df
 
 def read_chunks(file, chunk_size=1024):
