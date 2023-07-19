@@ -8,7 +8,6 @@ MODEL = SentenceTransformer('distilbert-base-nli-mean-tokens')
 
 def entry():
     document_directory = input("enter directory path of text corpus: \n")
-    print(isdir(document_directory), isfile(document_directory), exists(document_directory))
     if not isdir(document_directory):
         print("text corpus must be directory: ", document_directory)
         return
@@ -23,7 +22,8 @@ def entry():
     query_embedding = MODEL.encode(query)
 
     res = analyze(document_embeddings, query_embedding, 1)
-    print(res)
+    for r in res:
+        print(r, "\n")
 
 if __name__ == '__main__':
     entry()
